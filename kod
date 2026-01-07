@@ -36,6 +36,6 @@ if response.status_code == 200:
         "methane": ch4
     })
 
-    print(df.head())  # İlk birkaç satır
+    print(df.head()) 
 else:
     print("Hata:", response.status_code)
