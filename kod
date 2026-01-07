@@ -1,7 +1,41 @@
 import requests
+import pandas as pd
 
-url = "https://api.worldbank.org/v2/indicators?source=88&format=json"
-response = requests.get(url)
-data = response.json()
+url = "https://air-quality-api.open-meteo.com/v1/air-quality"
+params = {
+    "latitude": 31.558,
+    "longitude": 74.3507,
+    "hourly": "pm2_5,carbon_monoxide,nitrogen_dioxide,ozone,sulphur_dioxide,carbon_dioxide,ammonia,methane",
+    "start_date": "2024-11-01",
+    "end_date": "2025-09-01"
+}
 
-print(data[:2])
+response = requests.get(url, params=params)
+
+if response.status_code == 200:
+    data = response.json()
+
+    times = data["hourly"]["time"]
+
+    pm25 = data["hourly"]["pm2_5"]
+    co = data["hourly"]["carbon_monoxide"]
+    no2 = data["hourly"]["nitrogen_dioxide"]
+    o3 = data["hourly"]["ozone"]
+    so2 = data["hourly"]["sulphur_dioxide"]
+    co2 = data["hourly"]["carbon_dioxide"]
+    ch4 = data["hourly"]["methane"]
+
+    df = pd.DataFrame({
+        "time": times,
+        "pm2_5": pm25,
+        "carbon_monoxide": co,
+        "nitrogen_dioxide": no2,
+        "ozone": o3,
+        "sulphur_dioxide": so2,
+        "carbon_dioxide": co2,
+        "methane": ch4
+    })
+
+    print(df.head())  # İlk birkaç satır
+else:
+    print("Hata:", response.status_code)
