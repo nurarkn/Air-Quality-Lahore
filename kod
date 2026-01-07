@@ -1,0 +1,7 @@
+import requests
+
+url = "https://api.worldbank.org/v2/indicators?source=88&format=json"
+response = requests.get(url)
+data = response.json()
+
+print(data[:2])  # JSON veri genellikle iki katmanlı, baştan örnek alıyoruz
